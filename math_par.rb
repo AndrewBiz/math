@@ -119,11 +119,12 @@ begin #*** GLOBAL BLOCK
   puts_anb "Затрачено времени: #{((t_finish-t_start)*86400.0).to_f.round(1)} сек."
 
   # отправить по почте
+  #p ENV['SEND_ROBOT_PASSWORD']
   email_from = 'robot.anblab@gmail.com'
   address_to = ['andrew.bizyaev@gmail.com']
   Pony.options = { from: email_from, charset: 'utf-8', via: :smtp,
     via_options: { address: 'smtp.gmail.com', port: '587', enable_starttls_auto: true, 
-      user_name: email_from, password: 'anblab123qwe', authentication: :plain, 
+      user_name: email_from, password: ENV['SEND_ROBOT_PASSWORD'], authentication: :plain, 
         domain: "localhost.localdomain"} }
 
   address_to.each do |a|
