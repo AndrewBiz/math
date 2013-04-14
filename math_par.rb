@@ -3,6 +3,7 @@
 # (с) ANB Andrew Bizyaev Андрей Бизяев 
 
 require 'pony'
+require 'date'
 
 Vars = ["a", "b", "c", "d", "e", "f", "g", "h"]
 Signs = ["+", "-"]
@@ -68,7 +69,12 @@ def puts_anb msg
 end
 
 begin #*** GLOBAL BLOCK
-  # expr = ["-", "(", "a", "-", "b", ")", "+", "c"] 
+  # expr = ["-", "(", "a", "-", "b", ")", "+", "c"]
+  t_start = DateTime.now
+  print "Ваше имя: "
+  name_student = STDIN.gets
+  name_student.strip!.chomp!
+
   max_tasks = 5
   param_tasks = ARGV[0].to_i
   if param_tasks == 0 or param_tasks > max_tasks
@@ -109,11 +115,13 @@ begin #*** GLOBAL BLOCK
     puts_anb "*****************************************************"
   end
   puts_anb "ВСЕГО правильно решено #{num_ok} из #{num_tasks}"
+  t_finish = DateTime.now
+  puts_anb "Затрачено времени: #{((t_finish-t_start)*86400.0).to_f.round(1)} сек."
 
   # отправить по почте
   email_from = 'robot.anblab@gmail.com'
   address_to = ['andrew.bizyaev@gmail.com']
-  Pony.options = { from: email_from, via: :smtp,
+  Pony.options = { from: email_from, charset: 'utf-8', via: :smtp,
     via_options: { address: 'smtp.gmail.com', port: '587', enable_starttls_auto: true, 
       user_name: email_from, password: 'anblab123qwe', authentication: :plain, 
         domain: "localhost.localdomain"} }
@@ -122,7 +130,7 @@ begin #*** GLOBAL BLOCK
   begin
     puts "sending to #{a}..."
     Pony.mail( to: a,
-               subject: "Результаты теста по математике (решено #{num_ok} из #{num_tasks})",
+               subject: "#{name_student} - результаты теста по математике (решено #{num_ok} из #{num_tasks})",
                body: $text )
     puts "Ok"
   rescue Exception => e
