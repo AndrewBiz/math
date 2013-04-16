@@ -63,9 +63,9 @@ def generate_expr( max_var, num_var, num_par)
   [expr_to_s(expr), expr_vars]
 end
 
-def puts_anb msg
+def puts_anb msg, output=true
   $text << msg+"\n"
-  puts msg
+  puts msg if output
 end
 
 begin #*** GLOBAL BLOCK
@@ -95,28 +95,32 @@ begin #*** GLOBAL BLOCK
     print "Введите ответ: "
     expr_student = STDIN.gets
     expr_student.strip!.chomp!
+    puts "Ответ принят"
     begin
        result_student = eval(expr_vars+expr_student)
     rescue Exception => e
-       puts_anb "Введено некоректное математическое выражение"
+       puts_anb "Введено некоректное математическое выражение", false
        result_student = nil
     end
-    puts_anb "Проверка ответа:"
-    puts_anb expr_vars
+    puts_anb "Проверка ответа:", false
+    puts_anb expr_vars, false
     result_teacher = eval(expr_vars+expr_teacher)
-    puts_anb "Исходное выражение : #{expr_teacher} = #{result_teacher}"
-    puts_anb "Полученный ответ   : #{expr_student} = #{result_student}"
+    puts_anb "Исходное выражение : #{expr_teacher} = #{result_teacher}", false
+    puts_anb "Полученный ответ   : #{expr_student} = #{result_student}", false
     if result_student == result_teacher
       num_ok += 1
-      puts_anb "ПРАВИЛЬНО!"
+      puts_anb "ПРАВИЛЬНО!", false
     else
-      puts_anb "НЕПРАВИЛЬНО!"
+      puts_anb "НЕПРАВИЛЬНО!", false
     end
     puts_anb "*****************************************************"
   end
-  puts_anb "ВСЕГО правильно решено #{num_ok} из #{num_tasks}"
+  puts_anb "ВСЕГО правильно решено #{num_ok} из #{num_tasks}", false
   t_finish = DateTime.now
-  puts_anb "Затрачено времени: #{((t_finish-t_start)*86400.0).to_f.round(1)} сек."
+  puts_anb "Затрачено времени: #{((t_finish-t_start)*86400.0).to_f.round(1)} сек.", false
+
+  puts "*** Суммарные результаты ***"
+  puts $text
 
   # отправить по почте
   #p ENV['SEND_ROBOT_PASSWORD']
