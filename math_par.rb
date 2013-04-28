@@ -6,7 +6,7 @@ require 'pony'
 require 'date'
 
 Vars = ["a", "b", "c", "d", "e", "f", "g", "h"]
-Signs = ["+", "-"]
+Signs = ["+", "-", "-"]
 $text = ""
 
 def par1_in_good_position(pos, expr)
